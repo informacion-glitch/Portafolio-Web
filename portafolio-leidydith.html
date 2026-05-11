@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Didith — Administradora de empresas</title>
+
+  <!-- Google Fonts: Playfair Display (títulos) + Inter (cuerpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =============================================
+       VARIABLES Y RESET
+       ============================================= */
+    :root {
+      --negro:   #1e2d0a;
+      --blanco:  #f5f5f5;
+      --acento:  #E63946;
+      --gris:    #2a3f10;
+      --gris-claro: #3a5518;
+
+      --fuente-titulo: 'Playfair Display', serif;
+      --fuente-cuerpo: 'Inter', sans-serif;
+
+      --espacio-seccion: 5rem;
+      --max-ancho: 1100px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth; /* desplazamiento suave al hacer clic en el nav */
+    }
+
+    body {
+      background-color: var(--negro);
+      color: var(--blanco);
+      font-family: var(--fuente-cuerpo);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =============================================
+       NAVEGACIÓN
+       ============================================= */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background-color: rgba(13, 13, 13, 0.92);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--gris-claro);
+    }
+
+    .nav-contenedor {
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: var(--fuente-titulo);
+      font-size: 1.3rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-logo span {
+      color: var(--acento);
+    }
+
+    .nav-enlaces {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-enlaces a {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+
+    .nav-enlaces a:hover {
+      color: var(--acento);
+    }
+
+    /* =============================================
+       SECCIÓN HERO
+       ============================================= */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 2rem 4rem; /* espacio superior por la nav fija */
+      background-color: var(--negro);
+    }
+
+    .hero-contenido {
+      max-width: var(--max-ancho);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+
+    .hero-texto {
+      flex: 1;
+    }
+
+    /* Etiqueta pequeña sobre el título principal */
+    .hero-etiqueta {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--acento);
+      margin-bottom: 1rem;
+    }
+
+    .hero-titulo {
+      font-family: var(--fuente-titulo);
+      font-size: clamp(2.8rem, 6vw, 5rem); /* tamaño fluido */
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-titulo em {
+      font-style: italic;
+      color: var(--acento);
+    }
+
+    .hero-subtitulo {
+      font-size: 1.1rem;
+      color: #aaaaaa;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background-color: var(--acento);
+      color: var(--blanco);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-radius: 2px;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .hero-cta:hover {
+      background-color: #c0303c;
+      transform: translateY(-2px);
+    }
+
+    /* Imagen/avatar decorativo del hero */
+    .hero-imagen {
+      flex: 0 0 320px;
+      height: 420px;
+      background-color: var(--gris);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Marco decorativo con el color de acento */
+    .hero-imagen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 3px solid var(--acento);
+      border-radius: 4px;
+      transform: translate(12px, 12px);
+      z-index: -1;
+    }
+
+    /* Texto placeholder dentro del marco de imagen */
+    .hero-imagen-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: #555;
+      font-size: 0.85rem;
+    }
+
+    .hero-imagen-placeholder svg {
+      width: 64px;
+      height: 64px;
+      fill: #444;
+    }
+
+    /* =============================================
+       ESTILOS COMPARTIDOS ENTRE SECCIONES
+       ============================================= */
+    .seccion {
+      padding: var(--espacio-seccion) 2rem;
+    }
+
+    .seccion-contenedor {
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+    }
+
+    /* Línea decorativa roja antes del título de sección */
+    .seccion-etiqueta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--acento);
+      margin-bottom: 1rem;
+    }
+
+    .seccion-etiqueta::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 2px;
+      background-color: var(--acento);
+    }
+
+    .seccion-titulo {
+      font-family: var(--fuente-titulo);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    /* =============================================
+       SECCIÓN SOBRE MÍ
+       ============================================= */
+    #sobre-mi {
+      background-color: var(--gris);
+    }
+
+    .sobre-mi-inner {
+      display: flex;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+
+    .sobre-mi-texto {
+      flex: 1;
+    }
+
+    .sobre-mi-texto p {
+      color: #cccccc;
+      margin-bottom: 1.2rem;
+    }
+
+    /* Lista de habilidades con punto de acento */
+    .habilidades {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .habilidad-tag {
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--acento);
+      border-radius: 2px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--acento);
+    }
+
+    /* Columna de datos/estadísticas */
+    .sobre-mi-stats {
+      flex: 0 0 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .stat-item {
+      border-left: 3px solid var(--acento);
+      padding-left: 1rem;
+    }
+
+    .stat-numero {
+      font-family: var(--fuente-titulo);
+      font-size: 2.5rem;
+      line-height: 1;
+      color: var(--blanco);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* =============================================
+       SECCIÓN PROYECTOS
+       ============================================= */
+    #proyectos {
+      background-color: var(--negro);
+    }
+
+    .proyectos-encabezado {
+      margin-bottom: 3rem;
+    }
+
+    /* Contenedor de las 3 tarjetas en fila */
+    .proyectos-grid {
+      display: flex;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    /* Tarjeta de proyecto */
+    .card {
+      flex: 1;
+      background-color: var(--gris);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    /* Imagen/miniatura de la tarjeta */
+    .card-imagen {
+      width: 100%;
+      height: 200px;
+      background-color: var(--gris-claro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #555;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Barra de color en la parte superior de la imagen */
+    .card-imagen::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: var(--acento);
+    }
+
+    .card-cuerpo {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-categoria {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--acento);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-titulo {
+      font-family: var(--fuente-titulo);
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .card-descripcion {
+      font-size: 0.9rem;
+      color: #aaaaaa;
+      line-height: 1.6;
+      flex: 1; /* empuja el enlace al fondo */
+    }
+
+    .card-enlace {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--acento);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: letter-spacing 0.2s;
+    }
+
+    .card-enlace:hover {
+      letter-spacing: 0.15em;
+    }
+
+    .card-enlace::after {
+      content: ' →';
+    }
+
+    /* =============================================
+       SECCIÓN CONTACTO
+       ============================================= */
+    #contacto {
+      background-color: var(--gris);
+    }
+
+    .contacto-inner {
+      display: flex;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+
+    .contacto-info {
+      flex: 1;
+    }
+
+    .contacto-info p {
+      color: #cccccc;
+      margin-bottom: 2rem;
+    }
+
+    .contacto-datos {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .dato-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .dato-icono {
+      width: 36px;
+      height: 36px;
+      background-color: var(--acento);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    /* Formulario de contacto */
+    .contacto-form {
+      flex: 1;
+    }
+
+    .form-grupo {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-grupo label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-grupo input,
+    .form-grupo textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background-color: var(--negro);
+      border: 1px solid var(--gris-claro);
+      border-radius: 2px;
+      color: var(--blanco);
+      font-family: var(--fuente-cuerpo);
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-grupo input:focus,
+    .form-grupo textarea:focus {
+      outline: none;
+      border-color: var(--acento);
+    }
+
+    .form-grupo textarea {
+      height: 130px;
+      resize: vertical;
+    }
+
+    .boton-enviar {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      background-color: var(--acento);
+      color: var(--blanco);
+      font-family: var(--fuente-cuerpo);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .boton-enviar:hover {
+      background-color: #c0303c;
+      transform: translateY(-2px);
+    }
+
+    /* =============================================
+       FOOTER
+       ============================================= */
+    footer {
+      background-color: var(--negro);
+      border-top: 1px solid var(--gris-claro);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer-contenido {
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .footer-contenido a:hover {
+      color: var(--acento);
+    }
+
+    .footer-redes {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    /* =============================================
+       RESPONSIVE — TABLET (≤ 900px)
+       ============================================= */
+    @media (max-width: 900px) {
+      /* Hero: columna en lugar de fila */
+      .hero-contenido {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
+
+      .hero-imagen {
+        flex: 0 0 260px;
+        width: 260px;
+        margin: 0 auto;
+      }
+
+      .hero-subtitulo {
+        margin: 0 auto 2.5rem;
+      }
+
+      /* Proyectos: dos columnas (la tercera baja) */
+      .proyectos-grid {
+        flex-wrap: wrap;
+      }
+
+      .card {
+        flex: 1 1 calc(50% - 0.75rem);
+        min-width: 260px;
+      }
+
+      /* Sobre mí: columna */
+      .sobre-mi-inner {
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .sobre-mi-stats {
+        flex-direction: row;
+        flex: 0 0 auto;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      /* Contacto: columna */
+      .contacto-inner {
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      /* Footer: columna */
+      .footer-contenido {
+        flex-direction: column;
+      }
+    }
+
+    /* =============================================
+       RESPONSIVE — MÓVIL (≤ 600px)
+       ============================================= */
+    @media (max-width: 600px) {
+      :root {
+        --espacio-seccion: 3.5rem;
+      }
+
+      /* Ocultar el nav en móvil (no hay JS para toggle, se muestra logo) */
+      .nav-enlaces {
+        display: none;
+      }
+
+      .hero-imagen {
+        flex: 0 0 220px;
+        height: 280px;
+        width: 220px;
+      }
+
+      /* Las 3 tarjetas en una sola columna */
+      .card {
+        flex: 1 1 100%;
+      }
+
+      .sobre-mi-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .footer-contenido {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =============================================
+       NAVEGACIÓN FIJA
+       ============================================= -->
+  <nav aria-label="Navegación principal">
+    <div class="nav-contenedor">
+      <a href="#hero" class="nav-logo">Leidydith<span>.</span></a>
+      <ul class="nav-enlaces">
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- =============================================
+       HERO — Presentación principal
+       ============================================= -->
+  <section id="hero">
+    <div class="hero-contenido">
+
+      <div class="hero-texto">
+        <span class="hero-etiqueta">Diseñadora Gráfica &amp; Visual</span>
+
+        <h1 class="hero-titulo">
+          Hola, soy<br />
+          <em>Leidydith</em><br />
+          Ruiz.
+        </h1>
+
+        <p class="hero-subtitulo">
+          Creo identidades visuales que cuentan historias.
+          Me especializo en branding, ilustración y diseño editorial
+          con un enfoque minimalista y atrevido.
+        </p>
+
+        <a href="#proyectos" class="hero-cta">Ver proyectos</a>
+      </div>
+
+      <!-- Espacio reservado para foto de la diseñadora -->
+      <div class="hero-imagen" aria-hidden="true">
+        <div class="hero-imagen-placeholder">
+          <!-- Icono de persona SVG inline -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+          </svg>
+          <span>Tu foto aquí</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       SOBRE MÍ — Biografía y habilidades
+       ============================================= -->
+  <section id="sobre-mi" class="seccion">
+    <div class="seccion-contenedor">
+      <div class="sobre-mi-inner">
+
+        <div class="sobre-mi-texto">
+          <p class="seccion-etiqueta">Sobre mí</p>
+          <h2 class="seccion-titulo">Diseño con propósito,<br />comunico con forma.</h2>
+
+          <p>
+            Soy diseñadora gráfica con más de 5 años de experiencia creando
+            piezas visuales que conectan marcas con sus audiencias. Trabajo
+            desde la conceptualización hasta la entrega final, siempre poniendo
+            la intención antes que la decoración.
+          </p>
+          <p>
+            Me apasiona el diseño editorial y la construcción de sistemas de
+            identidad coherentes. Cada proyecto es una oportunidad de resolver
+            un problema de comunicación de manera elegante y funcional.
+          </p>
+
+          <!-- Etiquetas de habilidades -->
+          <div class="habilidades" role="list" aria-label="Habilidades">
+            <span class="habilidad-tag" role="listitem">Branding</span>
+            <span class="habilidad-tag" role="listitem">Identidad Visual</span>
+            <span class="habilidad-tag" role="listitem">Diseño Editorial</span>
+            <span class="habilidad-tag" role="listitem">Ilustración</span>
+            <span class="habilidad-tag" role="listitem">Tipografía</span>
+            <span class="habilidad-tag" role="listitem">Packaging</span>
+          </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <aside class="sobre-mi-stats" aria-label="Estadísticas">
+          <div class="stat-item">
+            <div class="stat-numero">5+</div>
+            <div class="stat-label">Años de experiencia</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-numero">40+</div>
+            <div class="stat-label">Proyectos completados</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-numero">18</div>
+            <div class="stat-label">Clientes satisfechos</div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       PROYECTOS — 3 tarjetas de trabajo
+       ============================================= -->
+  <section id="proyectos" class="seccion">
+    <div class="seccion-contenedor">
+
+      <header class="proyectos-encabezado">
+        <p class="seccion-etiqueta">Trabajo selecto</p>
+        <h2 class="seccion-titulo">Proyectos recientes.</h2>
+      </header>
+
+      <!-- Fila de 3 tarjetas usando Flexbox -->
+      <div class="proyectos-grid">
+
+        <!-- Tarjeta 1 -->
+        <article class="card">
+          <div class="card-imagen" aria-label="Vista previa del proyecto Café Nómada">
+            <!-- Reemplazar con <img src="proyecto-1.jpg" alt="..."> cuando tengas imágenes -->
+            <span>Imagen del proyecto</span>
+          </div>
+          <div class="card-cuerpo">
+            <p class="card-categoria">Identidad de marca</p>
+            <h3 class="card-titulo">Café Nómada</h3>
+            <p class="card-descripcion">
+              Sistema completo de identidad para una cafetería de especialidad.
+              Logotipo, paleta, tipografía, papelería y señalética en un
+              manual de marca de 32 páginas.
+            </p>
+            <a href="#contacto" class="card-enlace">Ver detalle</a>
+          </div>
+        </article>
+
+        <!-- Tarjeta 2 -->
+        <article class="card">
+          <div class="card-imagen" aria-label="Vista previa del proyecto Editorial Raíz">
+            <span>Imagen del proyecto</span>
+          </div>
+          <div class="card-cuerpo">
+            <p class="card-categoria">Diseño editorial</p>
+            <h3 class="card-titulo">Editorial Raíz</h3>
+            <p class="card-descripcion">
+              Diseño y maquetación de una revista cultural independiente de
+              periodicidad trimestral. 80 páginas, retícula modular,
+              dirección de arte e ilustraciones propias.
+            </p>
+            <a href="#contacto" class="card-enlace">Ver detalle</a>
+          </div>
+        </article>
+
+        <!-- Tarjeta 3 -->
+        <article class="card">
+          <div class="card-imagen" aria-label="Vista previa del proyecto Packaging Botánica">
+            <span>Imagen del proyecto</span>
+          </div>
+          <div class="card-cuerpo">
+            <p class="card-categoria">Packaging</p>
+            <h3 class="card-titulo">Botánica Skincare</h3>
+            <p class="card-descripcion">
+              Diseño de empaque para línea de cosméticos naturales.
+              Etiquetas, cajas y bolsas con ilustración botánica
+              a mano digitalizad y acabado texturizado.
+            </p>
+            <a href="#contacto" class="card-enlace">Ver detalle</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       CONTACTO — Datos + formulario
+       ============================================= -->
+  <section id="contacto" class="seccion">
+    <div class="seccion-contenedor">
+      <div class="contacto-inner">
+
+        <!-- Información de contacto -->
+        <div class="contacto-info">
+          <p class="seccion-etiqueta">Hablemos</p>
+          <h2 class="seccion-titulo">¿Tienes un proyecto<br />en mente?</h2>
+
+          <p>
+            Estoy disponible para proyectos freelance y colaboraciones.
+            Escríbeme y cuéntame tu idea; me encantará explorar cómo
+            puedo ayudarte.
+          </p>
+
+          <div class="contacto-datos">
+            <div class="dato-item">
+              <div class="dato-icono" aria-hidden="true">✉</div>
+              <span>hola@leidydithruiz.com</span>
+            </div>
+            <div class="dato-item">
+              <div class="dato-icono" aria-hidden="true">☎</div>
+              <span>+57 300 000 0000</span>
+            </div>
+            <div class="dato-item">
+              <div class="dato-icono" aria-hidden="true">◎</div>
+              <span>Bogotá, Colombia</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario de contacto (solo HTML, sin JS) -->
+        <form
+          class="contacto-form"
+          action="mailto:hola@leidydithruiz.com"
+          method="POST"
+          enctype="text/plain"
+          aria-label="Formulario de contacto"
+        >
+          <div class="form-grupo">
+            <label for="nombre">Nombre</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              placeholder="Tu nombre completo"
+              required
+            />
+          </div>
+
+          <div class="form-grupo">
+            <label for="email">Correo electrónico</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="tu@correo.com"
+              required
+            />
+          </div>
+
+          <div class="form-grupo">
+            <label for="mensaje">Mensaje</label>
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              placeholder="Cuéntame sobre tu proyecto…"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="boton-enviar">Enviar mensaje</button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       FOOTER
+       ============================================= -->
+  <footer>
+    <div class="footer-contenido">
+      <p>© 2026 Leidydith Ruiz. Todos los derechos reservados.</p>
+
+      <nav class="footer-redes" aria-label="Redes sociales">
+        <a href="#" aria-label="Behance">Behance</a>
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="LinkedIn">LinkedIn</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
+
+<!--
+=============================================
+  3 MEJORAS PARA DESPUÉS
+=============================================
+
+  1. MENÚ HAMBURGUESA EN MÓVIL
+     Actualmente el menú de navegación se oculta en pantallas pequeñas
+     (≤600px) porque sin JavaScript no hay forma de hacer toggle.
+     Cuando aprendas JS básico, puedes añadir un botón <button> con
+     un event listener que agregue/quite una clase "abierto" al <nav>.
+     Alternativa sin JS: usar el truco del <input type="checkbox"> oculto
+     combinado con el selector CSS :checked ~ ul.
+
+  2. IMÁGENES REALES EN LAS TARJETAS Y EN EL HERO
+     Los placeholders grises deben reemplazarse con etiquetas <img> que
+     apunten a capturas de los proyectos y a una foto profesional de
+     Leidydith. Asegúrate de optimizar las imágenes (WebP, tamaño ≤200 KB)
+     y de escribir textos alt descriptivos para accesibilidad.
+
+  3. ANIMACIONES DE ENTRADA CON @keyframes
+     Puedes animar elementos al hacer scroll usando únicamente CSS con
+     la propiedad animation-timeline: scroll() (soportada en Chrome/Edge)
+     o con la propiedad @keyframes clásica activada al llegar a cada
+     sección. Esto daría más vida a la página sin necesidad de JavaScript.
+-->
